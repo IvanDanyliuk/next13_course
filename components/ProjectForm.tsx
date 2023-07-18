@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { SessionInterface } from '@/common.types';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import FormField from './FormField';
+import { SessionInterface } from '@/common.types';
 import { categoryFilters } from '@/constant';
+import { createNewProject, fetchToken } from '@/lib/actions';
+import FormField from './FormField';
 import CustomMenu from './CustomMenu';
 import Button from './Button';
 
@@ -14,6 +16,8 @@ type Props = {
 }
 
 const ProjectForm = ({ type, session }: Props) => {
+  const router = useRouter();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     image: '',
@@ -24,8 +28,24 @@ const ProjectForm = ({ type, session }: Props) => {
     category: '',
   });
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    setIsSubmitting(true);
+
+    const { token } = await fetchToken();
+
+    try {
+      if(type === 'create') {
+        await createNewProject(form, session!.user?.id, token);
+
+        router.push('/');
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
