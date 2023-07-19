@@ -12,7 +12,7 @@ import Button from './Button';
 
 type Props = {
   type: string,
-  session?: SessionInterface,
+  session: SessionInterface,
 }
 
 const ProjectForm = ({ type, session }: Props) => {

@@ -6,7 +6,7 @@ import { getCurrentUser } from '@/lib/session';
 const CreateProject = async () => {
   const session = await getCurrentUser();
 
-  // if(!session?.user) redirect('/');
+  if(!session?.user) redirect('/');
 
   return (
     <Modal>
@@ -14,7 +14,7 @@ const CreateProject = async () => {
 
       <ProjectForm 
         type='create' 
-        // session={session} 
+        session={session} 
       />
     </Modal>
   );
